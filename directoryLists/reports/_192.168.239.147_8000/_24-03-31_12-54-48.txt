@@ -1,0 +1,4 @@
+# Dirsearch started Sun Mar 31 12:56:04 2024 as: /home/david/tools/dirsearch/dirsearch.py -u 192.168.239.147:8000 -w raft-large-directories-lowercase.txt
+
+404     2KB  http://192.168.239.147:8000/con
+404     2KB  http://192.168.239.147:8000/aux
