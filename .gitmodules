@@ -1,0 +1,3 @@
+[submodule "Miscellaneous/ntlm_theft"]
+	path = Miscellaneous/ntlm_theft
+	url = https://github.com/Greenwolf/ntlm_theft.git
