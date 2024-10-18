@@ -3,6 +3,10 @@
 This repository contains a collection of binaries and tools that I have utilized during my OSCP (Offensive Security Certified Professional) certification and various Capture The Flag (CTF) challenges. These tools are essential for tasks such as penetration testing, privilege escalation, exploitation, and post-exploitation.
 - **The links to the tools are not updated.**
 
+Clone the repository:
+```
+git clone --recurse-submodules https://github.com/hardsoftsecurity/Offensive-Security-Tools.git
+```
 
 ## Tools List
 
