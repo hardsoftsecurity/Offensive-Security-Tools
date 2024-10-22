@@ -42,8 +42,8 @@ def brute_force_service(ip, service):
 def process_ip(ip):
     """Process each IP by running the required scans and brute-forcing."""
     # Run AutoRecon and Nmap scans
-    run_autorecon(ip)
     run_nmap(ip)
+    run_autorecon(ip)
 
     # Read Nmap scan results to check for open ports
     nmap_log_file = f"results/{ip}_nmap_scan.log"
