@@ -41,12 +41,11 @@ def brute_force_service(ip, service):
 
 def process_ip(ip):
     """Process each IP by running the required scans and brute-forcing."""
-    # Run AutoRecon and Nmap scans
+    # Nmap scans
     run_nmap(ip)
-    run_autorecon(ip)
 
     # Read Nmap scan results to check for open ports
-    nmap_log_file = f"results/{ip}_nmap_scan.log"
+    nmap_log_file = f"logs/{ip}_nmap_scan.log"
     open_ports = []
     with open(nmap_log_file, "r") as f:
         for line in f:
@@ -59,6 +58,10 @@ def process_ip(ip):
     for service in open_ports:
         brute_force_service(ip, service)
 
+    # Run Autorecon
+    run_autorecon(ip)
+
+
 def main():
     if len(sys.argv) < 2:
         print("Usage: python3 script.py <IP1> <IP2> ... <IPN>")
@@ -66,6 +69,7 @@ def main():
 
     ips = sys.argv[1:]
     os.makedirs("logs", exist_ok=True)
+    os.makedirs("results", exist_ok=True)
 
     # Using ThreadPoolExecutor for simultaneous execution of tasks
     with ThreadPoolExecutor(max_workers=len(ips)) as executor:
