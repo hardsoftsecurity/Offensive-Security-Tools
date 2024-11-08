@@ -52,3 +52,6 @@
 [submodule "AD/PKINITtools"]
 	path = AD/PKINITtools
 	url = https://github.com/dirkjanm/PKINITtools.git
+[submodule "AD/pyLAPS"]
+	path = AD/pyLAPS
+	url = https://github.com/p0dalirius/pyLAPS.git
