@@ -63,63 +63,68 @@ ECHO.
 CALL :ColorLine "%E%32m[*]%E%97m BASIC SYSTEM INFO"
 CALL :ColorLine " %E%33m[+]%E%97m WINDOWS OS"
 ECHO.   [i] Check for vulnerabilities for the OS version with the applied patches
-ECHO.   [?] https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation#kernel-exploits
+ECHO.   [?] https://book.hacktricks.wiki/en/windows-hardening/windows-local-privilege-escalation/index.html#version-exploits
 systeminfo
 ECHO.
 CALL :T_Progress 2
 
 :ListHotFixes
-wmic qfe get Caption,Description,HotFixID,InstalledOn | more
+where wmic >nul 2>&1
+if %errorlevel% equ 0 (
+    wmic qfe get Caption,Description,HotFixID,InstalledOn
+) else (
+    powershell -command "Get-HotFix | Format-Table -AutoSize"
+)
 set expl=no
 for /f "tokens=3-9" %%a in ('systeminfo') do (ECHO."%%a %%b %%c %%d %%e %%f %%g" | findstr /i "2000 XP 2003 2008 vista" && set expl=yes) & (ECHO."%%a %%b %%c %%d %%e %%f %%g" | findstr /i /C:"windows 7" && set expl=yes)
 IF "%expl%" == "yes" ECHO.   [i] Possible exploits (https://github.com/codingo/OSCP-2/blob/master/Windows/WinPrivCheck.bat)
-IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn | findstr /C:"KB2592799" 1>NUL
+IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn 2>nul | findstr /C:"KB2592799" 1>NUL
 IF "%expl%" == "yes" IF errorlevel 1 ECHO.MS11-080 patch is NOT installed! (Vulns: XP/SP3,2K3/SP3-afd.sys)
-IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn | findstr /C:"KB3143141" 1>NUL
+IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn 2>nul | findstr /C:"KB3143141" 1>NUL
 IF "%expl%" == "yes" IF errorlevel 1 ECHO.MS16-032 patch is NOT installed! (Vulns: 2K8/SP1/2,Vista/SP2,7/SP1-secondary logon)
-IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn | findstr /C:"KB2393802" 1>NUL
+IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn 2>nul | findstr /C:"KB2393802" 1>NUL
 IF "%expl%" == "yes" IF errorlevel 1 ECHO.MS11-011 patch is NOT installed! (Vulns: XP/SP2/3,2K3/SP2,2K8/SP2,Vista/SP1/2,7/SP0-WmiTraceMessageVa)
-IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn | findstr /C:"KB982799" 1>NUL
+IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn 2>nul | findstr /C:"KB982799" 1>NUL
 IF "%expl%" == "yes" IF errorlevel 1 ECHO.MS10-59 patch is NOT installed! (Vulns: 2K8,Vista,7/SP0-Chimichurri)
-IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn | findstr /C:"KB979683" 1>NUL
+IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn 2>nul | findstr /C:"KB979683" 1>NUL
 IF "%expl%" == "yes" IF errorlevel 1 ECHO.MS10-21 patch is NOT installed! (Vulns: 2K/SP4,XP/SP2/3,2K3/SP2,2K8/SP2,Vista/SP0/1/2,7/SP0-Win Kernel)
-IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn | findstr /C:"KB2305420" 1>NUL
+IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn 2>nul | findstr /C:"KB2305420" 1>NUL
 IF "%expl%" == "yes" IF errorlevel 1 ECHO.MS10-092 patch is NOT installed! (Vulns: 2K8/SP0/1/2,Vista/SP1/2,7/SP0-Task Sched)
-IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn | findstr /C:"KB981957" 1>NUL
+IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn 2>nul | findstr /C:"KB981957" 1>NUL
 IF "%expl%" == "yes" IF errorlevel 1 ECHO.MS10-073 patch is NOT installed! (Vulns: XP/SP2/3,2K3/SP2/2K8/SP2,Vista/SP1/2,7/SP0-Keyboard Layout)
-IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn | findstr /C:"KB4013081" 1>NUL
+IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn 2>nul | findstr /C:"KB4013081" 1>NUL
 IF "%expl%" == "yes" IF errorlevel 1 ECHO.MS17-017 patch is NOT installed! (Vulns: 2K8/SP2,Vista/SP2,7/SP1-Registry Hive Loading)
-IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn | findstr /C:"KB977165" 1>NUL
+IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn 2>nul | findstr /C:"KB977165" 1>NUL
 IF "%expl%" == "yes" IF errorlevel 1 ECHO.MS10-015 patch is NOT installed! (Vulns: 2K,XP,2K3,2K8,Vista,7-User Mode to Ring)
-IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn | findstr /C:"KB941693" 1>NUL
+IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn 2>nul | findstr /C:"KB941693" 1>NUL
 IF "%expl%" == "yes" IF errorlevel 1 ECHO.MS08-025 patch is NOT installed! (Vulns: 2K/SP4,XP/SP2,2K3/SP1/2,2K8/SP0,Vista/SP0/1-win32k.sys)
-IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn | findstr /C:"KB920958" 1>NUL
+IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn 2>nul | findstr /C:"KB920958" 1>NUL
 IF "%expl%" == "yes" IF errorlevel 1 ECHO.MS06-049 patch is NOT installed! (Vulns: 2K/SP4-ZwQuerySysInfo)
-IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn | findstr /C:"KB914389" 1>NUL
+IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn 2>nul | findstr /C:"KB914389" 1>NUL
 IF "%expl%" == "yes" IF errorlevel 1 ECHO.MS06-030 patch is NOT installed! (Vulns: 2K,XP/SP2-Mrxsmb.sys)
-IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn | findstr /C:"KB908523" 1>NUL
+IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn 2>nul | findstr /C:"KB908523" 1>NUL
 IF "%expl%" == "yes" IF errorlevel 1 ECHO.MS05-055 patch is NOT installed! (Vulns: 2K/SP4-APC Data-Free)
-IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn | findstr /C:"KB890859" 1>NUL
+IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn 2>nul | findstr /C:"KB890859" 1>NUL
 IF "%expl%" == "yes" IF errorlevel 1 ECHO.MS05-018 patch is NOT installed! (Vulns: 2K/SP3/4,XP/SP1/2-CSRSS)
-IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn | findstr /C:"KB842526" 1>NUL
+IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn 2>nul | findstr /C:"KB842526" 1>NUL
 IF "%expl%" == "yes" IF errorlevel 1 ECHO.MS04-019 patch is NOT installed! (Vulns: 2K/SP2/3/4-Utility Manager)
-IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn | findstr /C:"KB835732" 1>NUL
+IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn 2>nul | findstr /C:"KB835732" 1>NUL
 IF "%expl%" == "yes" IF errorlevel 1 ECHO.MS04-011 patch is NOT installed! (Vulns: 2K/SP2/3/4,XP/SP0/1-LSASS service BoF)
-IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn | findstr /C:"KB841872" 1>NUL
+IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn 2>nul | findstr /C:"KB841872" 1>NUL
 IF "%expl%" == "yes" IF errorlevel 1 ECHO.MS04-020 patch is NOT installed! (Vulns: 2K/SP4-POSIX)
-IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn | findstr /C:"KB2975684" 1>NUL
+IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn 2>nul | findstr /C:"KB2975684" 1>NUL
 IF "%expl%" == "yes" IF errorlevel 1 ECHO.MS14-040 patch is NOT installed! (Vulns: 2K3/SP2,2K8/SP2,Vista/SP2,7/SP1-afd.sys Dangling Pointer)
-IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn | findstr /C:"KB3136041" 1>NUL
+IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn 2>nul | findstr /C:"KB3136041" 1>NUL
 IF "%expl%" == "yes" IF errorlevel 1 ECHO.MS16-016 patch is NOT installed! (Vulns: 2K8/SP1/2,Vista/SP2,7/SP1-WebDAV to Address)
-IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn | findstr /C:"KB3057191" 1>NUL
+IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn 2>nul | findstr /C:"KB3057191" 1>NUL
 IF "%expl%" == "yes" IF errorlevel 1 ECHO.MS15-051 patch is NOT installed! (Vulns: 2K3/SP2,2K8/SP2,Vista/SP2,7/SP1-win32k.sys)
-IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn | findstr /C:"KB2989935" 1>NUL
+IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn 2>nul | findstr /C:"KB2989935" 1>NUL
 IF "%expl%" == "yes" IF errorlevel 1 ECHO.MS14-070 patch is NOT installed! (Vulns: 2K3/SP2-TCP/IP)
-IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn | findstr /C:"KB2778930" 1>NUL
+IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn 2>nul | findstr /C:"KB2778930" 1>NUL
 IF "%expl%" == "yes" IF errorlevel 1 ECHO.MS13-005 patch is NOT installed! (Vulns: Vista,7,8,2008,2008R2,2012,RT-hwnd_broadcast)
-IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn | findstr /C:"KB2850851" 1>NUL
+IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn 2>nul | findstr /C:"KB2850851" 1>NUL
 IF "%expl%" == "yes" IF errorlevel 1 ECHO.MS13-053 patch is NOT installed! (Vulns: 7SP0/SP1_x86-schlamperei)
-IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn | findstr /C:"KB2870008" 1>NUL
+IF "%expl%" == "yes" wmic qfe get Caption,Description,HotFixID,InstalledOn 2>nul | findstr /C:"KB2870008" 1>NUL
 IF "%expl%" == "yes" IF errorlevel 1 ECHO.MS13-081 patch is NOT installed! (Vulns: 7SP0/SP1_x86-track_popup_menu)
 ECHO.
 CALL :T_Progress 2
@@ -147,9 +152,17 @@ ECHO.
 CALL :T_Progress 1
 
 :LAPSInstallCheck
-CALL :ColorLine " %E%33m[+]%E%97m LAPS installed?"
+CALL :ColorLine " %E%33m[+]%E%97m Legacy Microsoft LAPS installed?"
 ECHO.   [i] Check what is being logged
 REG QUERY "HKEY_LOCAL_MACHINE\Software\Policies\Microsoft Services\AdmPwd" /v AdmPwdEnabled 2>nul
+ECHO.
+CALL :T_Progress 1
+
+:WindowsLAPSInstallCheck
+CALL :ColorLine " %E%33m[+]%E%97m Windows LAPS installed?"
+ECHO.   [i] Check what is being logged: 0x00 Disabled, 0x01 Backup to Entra, 0x02 Backup to Active Directory
+REG QUERY "HKEY_LOCAL_MACHINE\Software\Microsoft\Policies\LAPS" /v BackupDirectory 2>nul
+REG QUERY "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\LAPS" /v BackupDirectory 2>nul
 ECHO.
 CALL :T_Progress 1
 
@@ -182,14 +195,19 @@ CALL :T_Progress 1
 :UACSettings
 CALL :ColorLine " %E%33m[+]%E%97m UAC Settings"
 ECHO.   [i] If the results read ENABLELUA REG_DWORD 0x1, part or all of the UAC components are on
-ECHO.   [?] https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation#basic-uac-bypass-full-file-system-access
+ECHO.   [?] https://book.hacktricks.wiki/en/windows-hardening/authentication-credentials-uac-and-efs/uac-user-account-control.html#very-basic-uac-bypass-full-file-system-access
 REG QUERY HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\System\ /v EnableLUA 2>nul
 ECHO.
 CALL :T_Progress 1
 
 :AVSettings
 CALL :ColorLine " %E%33m[+]%E%97m Registered Anti-Virus(AV)"
-WMIC /Node:localhost /Namespace:\\root\SecurityCenter2 Path AntiVirusProduct Get displayName /Format:List | more 
+where wmic >nul 2>&1
+if %errorlevel% equ 0 (
+    WMIC /Node:localhost /Namespace:\\root\SecurityCenter2 Path AntiVirusProduct Get displayName /Format:List
+) else (
+    powershell -command "Get-CimInstance -Namespace root/SecurityCenter2 -ClassName AntiVirusProduct | Select-Object -ExpandProperty displayName"
+) 
 ECHO.Checking for defender whitelisted PATHS
 reg query "HKLM\SOFTWARE\Microsoft\Windows Defender\Exclusions\Paths" 2>nul
 CALL :T_Progress 1
@@ -218,7 +236,12 @@ CALL :T_Progress 3
 :MountedDisks
 CALL :ColorLine " %E%33m[+]%E%97m MOUNTED DISKS"
 ECHO.   [i] Maybe you find something interesting
-(wmic logicaldisk get caption 2>nul | more) || (fsutil fsinfo drives 2>nul)
+where wmic >nul 2>&1
+if %errorlevel% equ 0 (
+    wmic logicaldisk get caption
+) else (
+    fsutil fsinfo drives
+)
 ECHO.
 CALL :T_Progress 1
 
@@ -233,7 +256,7 @@ CALL :T_Progress 1
 :InstalledSoftware
 CALL :ColorLine " %E%33m[+]%E%97m INSTALLED SOFTWARE"
 ECHO.   [i] Some weird software? Check for vulnerabilities in unknow software installed
-ECHO.   [?] https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation#software
+ECHO.   [?] https://book.hacktricks.wiki/en/windows-hardening/windows-local-privilege-escalation/index.html#applications
 ECHO.
 dir /b "C:\Program Files" "C:\Program Files (x86)" | sort
 reg query HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall /s | findstr InstallLocation | findstr ":\\"
@@ -244,7 +267,7 @@ CALL :T_Progress 2
 
 :RemodeDeskCredMgr
 CALL :ColorLine " %E%33m[+]%E%97m Remote Desktop Credentials Manager"
-ECHO.   [?] https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation#remote-desktop-credential-manager
+ECHO.   [?] https://book.hacktricks.wiki/en/windows-hardening/windows-local-privilege-escalation/index.html#remote-desktop-credential-manager
 IF exist "%LOCALAPPDATA%\Local\Microsoft\Remote Desktop Connection Manager\RDCMan.settings" ECHO.Found: RDCMan.settings in %AppLocal%\Local\Microsoft\Remote Desktop Connection Manager\RDCMan.settings, check for credentials in .rdg files
 ECHO.
 CALL :T_Progress 1
@@ -252,7 +275,7 @@ CALL :T_Progress 1
 :WSUS
 CALL :ColorLine " %E%33m[+]%E%97m WSUS"
 ECHO.   [i] You can inject 'fake' updates into non-SSL WSUS traffic (WSUXploit)
-ECHO.   [?] https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation#wsus
+ECHO.   [?] https://book.hacktricks.wiki/en/windows-hardening/windows-local-privilege-escalation/index.html#wsus
 reg query HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\WindowsUpdate\ 2>nul | findstr /i "wuserver" | findstr /i "http://"
 ECHO.
 CALL :T_Progress 1
@@ -260,20 +283,34 @@ CALL :T_Progress 1
 :RunningProcesses
 CALL :ColorLine " %E%33m[+]%E%97m RUNNING PROCESSES"
 ECHO.   [i] Something unexpected is running? Check for vulnerabilities
-ECHO.   [?] https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation#running-processes
+ECHO.   [?] https://book.hacktricks.wiki/en/windows-hardening/windows-local-privilege-escalation/index.html#running-processes
 tasklist /SVC
 ECHO.
 CALL :T_Progress 2
 ECHO.   [i] Checking file permissions of running processes (File backdooring - maybe the same files start automatically when Administrator logs in)
-for /f "tokens=2 delims='='" %%x in ('wmic process list full^|find /i "executablepath"^|find /i /v "system32"^|find ":"') do (
-	for /f eol^=^"^ delims^=^" %%z in ('ECHO.%%x') do (
-		icacls "%%z" 2>nul | findstr /i "(F) (M) (W) :\\" | findstr /i ":\\ everyone authenticated users todos %username%" && ECHO.
+where wmic >nul 2>&1
+if %errorlevel% equ 0 (
+	for /f "tokens=2 delims='='" %%x in ('wmic process list full ^|find /i "executablepath"^|find /i /v "system32"^|find ":"') do (
+		for /f eol^=^"^ delims^=^" %%z in ('ECHO.%%x') do (
+			icacls "%%z" 2>nul | findstr /i "(F) (M) (W) :\\" | findstr /i ":\\ everyone authenticated users todos %username%" && ECHO.
+		)
+	)
+) else (
+	for /f "tokens=*" %%x in ('powershell -command "Get-Process | Where-Object {$_.Path -and $_.Path -notlike '*system32*'} | Select-Object -ExpandProperty Path -Unique"') do (
+		icacls "%%x" 2>nul | findstr /i "(F) (M) (W) :\\" | findstr /i ":\\ everyone authenticated users todos %username%" && ECHO.
 	)
 )
 ECHO.
 ECHO.   [i] Checking directory permissions of running processes (DLL injection)
-for /f "tokens=2 delims='='" %%x in ('wmic process list full^|find /i "executablepath"^|find /i /v "system32"^|find ":"') do for /f eol^=^"^ delims^=^" %%y in ('ECHO.%%x') do (
-	icacls "%%~dpy\" 2>nul | findstr /i "(F) (M) (W) :\\" | findstr /i ":\\ everyone authenticated users todos %username%" && ECHO.
+where wmic >nul 2>&1
+if %errorlevel% equ 0 (
+	for /f "tokens=2 delims='='" %%x in ('wmic process list full ^|find /i "executablepath"^|find /i /v "system32"^|find ":"') do for /f eol^=^"^ delims^=^" %%y in ('ECHO.%%x') do (
+		icacls "%%~dpy\" 2>nul | findstr /i "(F) (M) (W) :\\" | findstr /i ":\\ everyone authenticated users todos %username%" && ECHO.
+	)
+) else (
+	for /f "tokens=*" %%x in ('powershell -command "Get-Process | Where-Object {$_.Path -and $_.Path -notlike '*system32*'} | Select-Object -ExpandProperty Path -Unique"') do (
+		for /f "delims=" %%d in ("%%~dpx") do icacls "%%d" 2>nul | findstr /i "(F) (M) (W) :\\" | findstr /i ":\\ everyone authenticated users todos %username%" && ECHO.
+	)
 )
 ECHO.
 CALL :T_Progress 3
@@ -281,7 +318,7 @@ CALL :T_Progress 3
 :RunAtStartup
 CALL :ColorLine " %E%33m[+]%E%97m RUN AT STARTUP"
 ECHO.   [i] Check if you can modify any binary that is going to be executed by admin or if you can impersonate a not found binary
-ECHO.   [?] https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation#run-at-startup
+ECHO.   [?] https://book.hacktricks.wiki/en/windows-hardening/windows-local-privilege-escalation/index.html#run-at-startup
 ::(autorunsc.exe -m -nobanner -a * -ct /accepteula 2>nul || wmic startup get caption,command 2>nul | more & ^
 reg query HKLM\Software\Microsoft\Windows\CurrentVersion\Run 2>nul & ^
 reg query HKLM\Software\Microsoft\Windows\CurrentVersion\RunOnce 2>nul & ^
@@ -305,7 +342,7 @@ CALL :T_Progress 2
 :AlwaysInstallElevated
 CALL :ColorLine " %E%33m[+]%E%97m AlwaysInstallElevated?"
 ECHO.   [i] If '1' then you can install a .msi file with admin privileges ;)
-ECHO.   [?] https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation#alwaysinstallelevated
+ECHO.   [?] https://book.hacktricks.wiki/en/windows-hardening/windows-local-privilege-escalation/index.html#alwaysinstallelevated-1
 reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated 2> nul
 reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated 2> nul
 ECHO.
@@ -368,8 +405,8 @@ CALL :T_Progress 1
 
 :BasicUserInfo
 CALL :ColorLine "%E%32m[*]%E%97m BASIC USER INFO
-ECHO.   [i] Check if you are inside the Administrators group or if you have enabled any token that can be use to escalate privileges like SeImpersonatePrivilege, SeAssignPrimaryPrivilege, SeTcbPrivilege, SeBackupPrivilege, SeRestorePrivilege, SeCreateTokenPrivilege, SeLoadDriverPrivilege, SeTakeOwnershipPrivilege, SeDebbugPrivilege
-ECHO.   [?] https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation#users-and-groups
+ECHO.   [i] Check if you are inside the Administrators group or if you have enabled any token that can be use to escalate privileges like SeImpersonatePrivilege, SeAssignPrimaryPrivilege, SeTcbPrivilege, SeBackupPrivilege, SeRestorePrivilege, SeCreateTokenPrivilege, SeLoadDriverPrivilege, SeTakeOwnershipPrivilege, SeDebugPrivilege
+ECHO.   [?] https://book.hacktricks.wiki/en/windows-hardening/windows-local-privilege-escalation/index.html#users--groups
 ECHO.
 CALL :ColorLine " %E%33m[+]%E%97m CURRENT USER"
 net user %username%
@@ -443,16 +480,27 @@ ECHO.
 
 :ServiceBinaryPermissions
 CALL :ColorLine " %E%33m[+]%E%97m SERVICE BINARY PERMISSIONS WITH WMIC and ICACLS"
-ECHO.   [?] https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation#services
-for /f "tokens=2 delims='='" %%a in ('cmd.exe /c wmic service list full ^| findstr /i "pathname" ^|findstr /i /v "system32"') do (
-    for /f eol^=^"^ delims^=^" %%b in ("%%a") do icacls "%%b" 2>nul | findstr /i "(F) (M) (W) :\\" | findstr /i ":\\ everyone authenticated users todos usuarios %username%" && ECHO.
+ECHO.   [?] https://book.hacktricks.wiki/en/windows-hardening/windows-local-privilege-escalation/index.html#services
+where wmic >nul 2>&1
+if %errorlevel% equ 0 (
+	for /f "tokens=2 delims='='" %%a in ('cmd.exe /c wmic service list full ^| findstr /i "pathname" ^|findstr /i /v "system32"') do (
+		for /f eol^=^"^ delims^=^" %%b in ("%%a") do icacls "%%b" 2>nul | findstr /i "(F) (M) (W) :\\" | findstr /i ":\\ everyone authenticated users todos usuarios %username%" && ECHO.
+	)
+) else (
+	for /f "tokens=*" %%a in ('powershell -command "Get-CimInstance -ClassName Win32_Service | Where-Object {$_.PathName -and $_.PathName -notlike '*system32*'} | Select-Object -ExpandProperty PathName"') do (
+		for /f "tokens=1 delims= " %%b in ("%%a") do (
+			set "svcpath=%%b"
+			set "svcpath=!svcpath:~1,-1!"
+			if exist "!svcpath!" icacls "!svcpath!" 2>nul | findstr /i "(F) (M) (W) :\\" | findstr /i ":\\ everyone authenticated users todos usuarios %username%" && ECHO.
+		)
+	)
 )
 ECHO.
 CALL :T_Progress 1
 
 :CheckRegistryModificationAbilities
 CALL :ColorLine " %E%33m[+]%E%97m CHECK IF YOU CAN MODIFY ANY SERVICE REGISTRY"
-ECHO.   [?] https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation#services
+ECHO.   [?] https://book.hacktricks.wiki/en/windows-hardening/windows-local-privilege-escalation/index.html#services
 for /f %%a in ('reg query hklm\system\currentcontrolset\services') do del %temp%\reg.hiv >nul 2>&1 & reg save %%a %temp%\reg.hiv >nul 2>&1 && reg restore %%a %temp%\reg.hiv >nul 2>&1 && ECHO.You can modify %%a
 ECHO.
 CALL :T_Progress 1
@@ -461,7 +509,7 @@ CALL :T_Progress 1
 CALL :ColorLine " %E%33m[+]%E%97m UNQUOTED SERVICE PATHS"
 ECHO.   [i] When the path is not quoted (ex: C:\Program files\soft\new folder\exec.exe) Windows will try to execute first 'C:\Program.exe', then 'C:\Program Files\soft\new.exe' and finally 'C:\Program Files\soft\new folder\exec.exe'. Try to create 'C:\Program Files\soft\new.exe'
 ECHO.   [i] The permissions are also checked and filtered using icacls
-ECHO.   [?] https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation#services
+ECHO.   [?] https://book.hacktricks.wiki/en/windows-hardening/windows-local-privilege-escalation/index.html#services
 for /f "tokens=2" %%n in ('sc query state^= all^| findstr SERVICE_NAME') do (
 	for /f "delims=: tokens=1*" %%r in ('sc qc "%%~n" ^| findstr BINARY_PATH_NAME ^| findstr /i /v /l /c:"c:\windows\system32" ^| findstr /v /c:""""') do (
 		ECHO.%%~s ^| findstr /r /c:"[a-Z][ ][a-Z]" >nul 2>&1 && (ECHO.%%n && ECHO.%%~s && icacls %%s | findstr /i "(F) (M) (W) :\" | findstr /i ":\\ everyone authenticated users todos %username%") && ECHO.
@@ -476,7 +524,7 @@ ECHO.
 CALL :ColorLine "%E%32m[*]%E%97m DLL HIJACKING in PATHenv variable"
 ECHO.   [i] Maybe you can take advantage of modifying/creating some binary in some of the following locations
 ECHO.   [i] PATH variable entries permissions - place binary or DLL to execute instead of legitimate
-ECHO.   [?] https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation#dll-hijacking
+ECHO.   [?] https://book.hacktricks.wiki/en/windows-hardening/windows-local-privilege-escalation/index.html#dll-hijacking
 for %%A in ("%path:;=";"%") do ( cmd.exe /c icacls "%%~A" 2>nul | findstr /i "(F) (M) (W) :\" | findstr /i ":\\ everyone authenticated users todos %username%" && ECHO. )
 ECHO.
 CALL :T_Progress 1
@@ -485,7 +533,7 @@ CALL :T_Progress 1
 CALL :ColorLine "%E%32m[*]%E%97m CREDENTIALS"
 ECHO.
 CALL :ColorLine " %E%33m[+]%E%97m WINDOWS VAULT"
-ECHO.   [?] https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation#windows-vault
+ECHO.   [?] https://book.hacktricks.wiki/en/windows-hardening/windows-local-privilege-escalation/index.html#credentials-manager--windows-vault
 cmdkey /list
 ECHO.
 CALL :T_Progress 2
@@ -493,14 +541,14 @@ CALL :T_Progress 2
 :DPAPIMasterKeys
 CALL :ColorLine " %E%33m[+]%E%97m DPAPI MASTER KEYS"
 ECHO.   [i] Use the Mimikatz 'dpapi::masterkey' module with appropriate arguments (/rpc) to decrypt
-ECHO.   [?] https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation#dpapi
+ECHO.   [?] https://book.hacktricks.wiki/en/windows-hardening/windows-local-privilege-escalation/index.html#dpapi
 powershell -command "Get-ChildItem %appdata%\Microsoft\Protect" 2>nul
 powershell -command "Get-ChildItem %localappdata%\Microsoft\Protect" 2>nul
 CALL :T_Progress 2
 CALL :ColorLine " %E%33m[+]%E%97m DPAPI MASTER KEYS"
 ECHO.   [i] Use the Mimikatz 'dpapi::cred' module with appropriate /masterkey to decrypt
 ECHO.   [i] You can also extract many DPAPI masterkeys from memory with the Mimikatz 'sekurlsa::dpapi' module
-ECHO.   [?] https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation#dpapi
+ECHO.   [?] https://book.hacktricks.wiki/en/windows-hardening/windows-local-privilege-escalation/index.html#dpapi
 ECHO.
 ECHO.Looking inside %appdata%\Microsoft\Credentials\
 ECHO.
@@ -573,7 +621,7 @@ CALL :T_Progress 2
 
 :AppCMD
 CALL :ColorLine " %E%33m[+]%E%97m AppCmd"
-ECHO.   [?] https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation#appcmd.exe
+ECHO.   [?] https://book.hacktricks.wiki/en/windows-hardening/windows-local-privilege-escalation/index.html#appcmdexe
 IF EXIST %systemroot%\system32\inetsrv\appcmd.exe ECHO.%systemroot%\system32\inetsrv\appcmd.exe exists. 
 ECHO.
 CALL :T_Progress 2
@@ -581,7 +629,7 @@ CALL :T_Progress 2
 :RegFilesCredentials
 CALL :ColorLine " %E%33m[+]%E%97m Files in registry that may contain credentials"
 ECHO.   [i] Searching specific files that may contains credentials.
-ECHO.   [?] https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation#credentials-inside-files
+ECHO.   [?] https://book.hacktricks.wiki/en/windows-hardening/windows-local-privilege-escalation/index.html#files-and-registry-credentials
 ECHO.Looking inside HKCU\Software\ORL\WinVNC3\Password
 reg query HKCU\Software\ORL\WinVNC3\Password 2>nul
 CALL :T_Progress 2
@@ -620,16 +668,29 @@ if "%long%" == "true" (
 	ECHO.
 	ECHO.   [i] Iterating through the drives
 	ECHO.
-	for /f %%x in ('wmic logicaldisk get name^| more') do (
-		set tdrive=%%x
-		if "!tdrive:~1,2!" == ":" (
-			%%x
-            CALL :ColorLine " %E%33m[+]%E%97m FILES THAT CONTAINS THE WORD PASSWORD WITH EXTENSION: .xml .ini .txt *.cfg *.config"
-	        findstr /s/n/m/i password *.xml *.ini *.txt *.cfg *.config 2>nul | findstr /v /i "\\AppData\\Local \\WinSxS ApnDatabase.xml \\UEV\\InboxTemplates \\Microsoft.Windows.Cloud \\Notepad\+\+\\ vmware cortana alphabet \\7-zip\\" 2>nul
-            ECHO.
-            CALL :ColorLine " %E%33m[+]%E%97m FILES WHOSE NAME CONTAINS THE WORD PASS CRED or .config not inside \Windows\"
-            dir /s/b *pass* == *cred* == *.config* == *.cfg 2>nul | findstr /v /i "\\windows\\"  
-            ECHO.
+	where wmic >nul 2>&1
+	if !errorlevel! equ 0 (
+		for /f %%x in ('wmic logicaldisk get name') do (
+			set tdrive=%%x
+			if "!tdrive:~1,2!" == ":" (
+				%%x
+				CALL :ColorLine " %E%33m[+]%E%97m FILES THAT CONTAINS THE WORD PASSWORD WITH EXTENSION: .xml .ini .txt *.cfg *.config"
+				findstr /s/n/m/i password *.xml *.ini *.txt *.cfg *.config 2>nul | findstr /v /i "\\AppData\\Local \\WinSxS ApnDatabase.xml \\UEV\\InboxTemplates \\Microsoft.Windows.Cloud \\Notepad\+\+\\ vmware cortana alphabet \\7-zip\\" 2>nul
+				ECHO.
+				CALL :ColorLine " %E%33m[+]%E%97m FILES WHOSE NAME CONTAINS THE WORD PASS CRED or .config not inside \Windows\"
+				dir /s/b *pass* == *cred* == *.config* == *.cfg 2>nul | findstr /v /i "\\windows\\"
+				ECHO.
+			)
+		)
+	) else (
+		for /f %%x in ('powershell -command "Get-PSDrive -PSProvider FileSystem | Where-Object {$_.Root -match ':'} | Select-Object -ExpandProperty Name"') do (
+			%%x:
+			CALL :ColorLine " %E%33m[+]%E%97m FILES THAT CONTAINS THE WORD PASSWORD WITH EXTENSION: .xml .ini .txt *.cfg *.config"
+			findstr /s/n/m/i password *.xml *.ini *.txt *.cfg *.config 2>nul | findstr /v /i "\\AppData\\Local \\WinSxS ApnDatabase.xml \\UEV\\InboxTemplates \\Microsoft.Windows.Cloud \\Notepad\+\+\\ vmware cortana alphabet \\7-zip\\" 2>nul
+			ECHO.
+			CALL :ColorLine " %E%33m[+]%E%97m FILES WHOSE NAME CONTAINS THE WORD PASS CRED or .config not inside \Windows\"
+			dir /s/b *pass* == *cred* == *.config* == *.cfg 2>nul | findstr /v /i "\\windows\\"
+			ECHO.
 		)
 	)
 	CALL :T_Progress 2
@@ -646,7 +707,8 @@ EXIT /B
 
 :SetOnce
 REM :: ANSI escape character is set once below - for ColorLine Subroutine
-SET "E=0x1B["
+for /F %%a in ('echo prompt $E ^| cmd') do set "ESC=%%a"
+SET "E=%ESC%["
 SET "PercentageTrack=0"
 EXIT /B
 
@@ -658,5 +720,5 @@ EXIT /B
 
 :ColorLine
 SET "CurrentLine=%~1"
-FOR /F "delims=" %%A IN ('FORFILES.EXE /P %~dp0 /M %~nx0 /C "CMD /C ECHO.!CurrentLine!"') DO ECHO.%%A
+ECHO.!CurrentLine!
 EXIT /B
