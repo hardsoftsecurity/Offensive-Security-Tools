@@ -26,3 +26,7 @@ htmlcov/
 
 # Sensitive data
 .env
+
+# Large security binaries
+Enumeration/httpx
+Enumeration/nuclei
