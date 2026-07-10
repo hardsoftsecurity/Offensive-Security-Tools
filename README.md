@@ -193,6 +193,7 @@ Foundational tools for protocol interaction, password manipulation, and speciali
 | **KeeThief / KeeTheft** | Tools for extracting KeePass master keys from the memory of a running process |
 | **kerbrute** | High-performance Kerberos brute-forcing and enumeration (Linux binary) |
 | **maskprocessor** | High-performance word generator based on character masks for advanced password cracking |
+| **[Darkmoon](https://github.com/ASCIT31/Dark-Moon)** | Open-source (GPL-3.0) autonomous AI pentest platform and MCP host that orchestrates 80+ tools via per-technology offensive sub-agents, with Active Directory and Kubernetes coverage and a local 14B LLM |
 | **kwprocessor** | Advanced keyboard-walk generator (e.g., "qwerty") for creating custom dictionaries |
 
 ---
