@@ -194,6 +194,7 @@ Foundational tools for protocol interaction, password manipulation, and speciali
 | **kerbrute** | High-performance Kerberos brute-forcing and enumeration (Linux binary) |
 | **maskprocessor** | High-performance word generator based on character masks for advanced password cracking |
 | **kwprocessor** | Advanced keyboard-walk generator (e.g., "qwerty") for creating custom dictionaries |
+| **[Pentest Swarm AI](https://github.com/Armur-Ai/Pentest-Swarm-AI)** | Open-source framework where a swarm of AI agents autonomously runs recon, chains vulnerabilities, and proves exploitation with a working proof-of-concept, behind fail-closed scope, egress and authorization guardrails |
 
 ---
 
